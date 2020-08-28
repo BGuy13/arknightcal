@@ -15,40 +15,34 @@ cc = OpenCC('s2twp')
 #     password = "BGuy6013@",
 #     database = "arknightcal"
 # )
-
+char = {}
 cnt = 0
-for i in range(1, 2):
+for i in range(1, 11):
     link = "https://www.diopoo.com/ark/characters?pn=" + str(i)
     print(link)
     nl_response = rq.get(link)
     soup = BeautifulSoup(nl_response.text, "html.parser")
-    for charSet in soup.findAll('div', {'class': 'round shadow'}):
-        charJobStr = charSet.find('img', {'class': 'job shadow'}).get('src')
+    tmpCnt = cnt
+    for charSet1 in soup.findAll('div', {'class': 'round shadow'}):
+        char[cnt] = {}
+        charJobStr = charSet1.find('img', {'class': 'job shadow'}).get('src')
         charJobStr = charJobStr.split("/")[4].split(".")[0]
-        charStarStr = charSet.find('img', {'class': 'star'}).get('src')
+        charStarStr = charSet1.find('img', {'class': 'star'}).get('src')
         charStarStr = charStarStr.split("_")[1].split(".")[0]
-        print(str(cnt).zfill(3) + " : " + charJobStr + " -> " + charStarStr)
+        char[cnt]["id"] = str(cnt + 1)
+        char[cnt]["job"] = charJobStr
+        char[cnt]["star"] = str(int(charStarStr) + 1)
         cnt += 1
-    # for charJob in soup.findAll('img', {'class': 'job shadow'}):
-    #     print(charJob.get('src'))
-    # for charStar in soup.findAll('img', {'class': 'star'}):
-    #     print(charStar.get('src'))
-    
+    for charSet2 in soup.findAll('a', {'class': 'name'}):
+        char[tmpCnt]["name"] = cc.convert(charSet2.string)
+        char[tmpCnt]["link"] = "https://www.diopoo.com/ark/" + charSet2.get('href')
+        tmpCnt += 1
 
-
-
-
-
-
-# fp = io.open("link01.csv", "w")
-# for i in range(1, 11):
-#     link = "https://www.diopoo.com/ark/characters?pn=" + str(i)
-#     print(link)
-#     # fp.write(link + "\n")
-#     nl_response = rq.get(link)
-#     soup = BeautifulSoup(nl_response.text, "html.parser")
-#     for character in soup.findAll('a', {'class': 'name'}):
-#         # print(cc.convert(character.string) + " -> https://www.diopoo.com/ark/" + character.get('href'))
-#         fp.write(cc.convert(character.text) + ",https://www.diopoo.com/ark/" + character.get('href') + "\n")
-# print("end")
-# fp.close()
+fp = io.open("charList.csv", "w")
+for j in range(0, cnt):
+    if j == cnt - 1:
+        fp.write(char[j]['id'] + "," + char[j]['job'] + "," + char[j]['star'] + "," + char[j]['name'] + "," + char[j]['link'])
+    else:
+        fp.write(char[j]['id'] + "," + char[j]['job'] + "," + char[j]['star'] + "," + char[j]['name'] + "," + char[j]['link'] + "\n")
+print("end")
+fp.close()
