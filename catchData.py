@@ -7,7 +7,7 @@ import io
 from opencc import OpenCC
 cc = OpenCC('s2twp')
 
-fp = io.open("data01.csv", "w")
+fp = io.open("material.csv", "w", encoding="utf-8")
 for i in range(1, 11):
     link = "https://www.diopoo.com/ark/items?pn=" + str(i)
     print(link)
