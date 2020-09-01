@@ -2,50 +2,52 @@
 # coding:utf-8
 
 import requests as rq
-from bs4 import BeautifulSoup
-import io
-import time
-# import mysql.connector
-from opencc import OpenCC
-cc = OpenCC('s2twp')
+from lxml import etree
 
-# arkdb = mysql.connector.connect(
-#     host = "192.168.168.146",
-#     user = "arkdeve",
-#     password = "BGuy6013@",
-#     database = "arknightDB"
-# )
-# cursor = arkdb.cursor()
+headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36"}
+res = rq.get("https://www.diopoo.com/ark/character/723870",headers = headers)
+content = res.content.decode("utf-8")
+# print(content)
+# print(res)
 
-char = {}
-cnt = 0
-for i in range(1, 11):
-    link = "https://www.diopoo.com/ark/characters?pn=" + str(i)
-    print(link)
-    nl_response = rq.get(link)
-    soup = BeautifulSoup(nl_response.text, "html.parser")
-    tmpCnt = cnt
-    for charSet1 in soup.findAll('div', {'class': 'round shadow'}):
-        char[cnt] = {}
-        charJobStr = charSet1.find('img', {'class': 'job shadow'}).get('src')
-        charJobStr = charJobStr.split("/")[4].split(".")[0]
-        charStarStr = charSet1.find('img', {'class': 'star'}).get('src')
-        charStarStr = charStarStr.split("_")[1].split(".")[0]
-        char[cnt]["id"] = str(cnt + 1)
-        char[cnt]["job"] = charJobStr
-        char[cnt]["star"] = str(int(charStarStr) + 1)
-        cnt += 1
-    for charSet2 in soup.findAll('a', {'class': 'name'}):
-        char[tmpCnt]["name"] = cc.convert(charSet2.string)
-        char[tmpCnt]["link"] = "https://www.diopoo.com/ark/" + charSet2.get('href')
-        tmpCnt += 1
+html = etree.HTML(content)
 
-fp = io.open("charList.csv", "w", encoding="utf-8")
-fp.write("char_id,job,star,charName,infoLink\n")
-for j in range(0, cnt):
-    if j == cnt - 1:
-        fp.write(char[j]['id'] + "," + char[j]['job'] + "," + char[j]['star'] + "," + char[j]['name'] + "," + char[j]['link'])
-    else:
-        fp.write(char[j]['id'] + "," + char[j]['job'] + "," + char[j]['star'] + "," + char[j]['name'] + "," + char[j]['link'] + "\n")
-print("end")
-fp.close()
+# 技能等級一到七
+sk0 = {}
+cnt = 1
+for i in range(2, 8):
+    sk0[cnt] = {}
+    sk0[cnt]['level'] = i
+    sk0[cnt]['materials'] = {}
+    for j in range(1, 4):
+        try:
+            sk0[cnt]['materials'][j] = {}
+            sk0[cnt]['materials'][j]['name'] = html.xpath('/html/body/div[2]/div[1]/div[2]/table[5]/tbody/tr[' + str(i-1) + ']/td/a[' + str(j) + ']/div/table/tr[1]/td[2]/text()')[0]
+            sk0[cnt]['materials'][j]['quantity'] = html.xpath('/html/body/div[2]/div[1]/div[2]/table[5]/tbody/tr[' + str(i-1) + ']/td/a[' + str(j) + ']/span/text()')[0]
+        except:
+            del sk0[cnt]['materials'][j]
+            break
+    cnt += 1
+# print(sk0)
+
+# 技能等級八到十
+sk8_10 = {}
+cnto = 1
+for s in range(1, 4):
+    sk8_10[cnto] = {}
+    cnti = 7
+    for i in range(8, 11):
+        sk8_10[cnto][cnti] = {}
+        sk8_10[cnto][cnti]['level'] = i
+        sk8_10[cnto][cnti]['materials'] = {}
+        for j in range(1, 4):
+            try:
+                sk8_10[cnto][cnti]['materials'][j] = {}
+                sk8_10[cnto][cnti]['materials'][j]['name'] = html.xpath('/html/body/div[2]/div[1]/div[2]/table[' + str(s+1) + ']/tbody/tr[5]/td[' + str(i-7) + ']/a[' + str(j) + ']/div/table/tr[1]/td[2]/text()')
+                sk8_10[cnto][cnti]['materials'][j]['quantity'] = html.xpath('/html/body/div[2]/div[1]/div[2]/table[' + str(s+1) + ']/tbody/tr[5]/td[' + str(i-7) + ']/a[' + str(j) + ']/span/text()')
+            except:
+                del sk8_10[cnto][cnti]['materials'][j]
+                break
+        cnti += 1
+    cnto += 1
+# print(sk8_10)
