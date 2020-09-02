@@ -4,7 +4,6 @@
 import requests as rq
 from bs4 import BeautifulSoup
 import io
-import time
 # import mysql.connector
 from opencc import OpenCC
 cc = OpenCC('s2twp')
