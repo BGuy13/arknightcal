@@ -1,6 +1,7 @@
 # !/usr/bin/python
 # coding:utf-8
 
+import openpyxl
 from openpyxl import load_workbook
 from openpyxl.workbook import Workbook
 from openpyxl.worksheet.datavalidation import DataValidation
@@ -9,14 +10,16 @@ from openpyxl.styles import PatternFill, Border, Side, Alignment
 import json
 import mysql.connector
 
+
 def takeThird(elem):
     return elem[2]
 
+
 arkdb = mysql.connector.connect(
-    host = "192.168.168.146",
-    user = "arkdeve",
-    password = "BGuy6013@",
-    database = "arknightDB"
+    host="192.168.168.146",
+    user="arkdeve",
+    password="BGuy6013@",
+    database="arknightDB"
 )
 cursor = arkdb.cursor()
 
@@ -25,6 +28,7 @@ datas = cursor.fetchall()
 
 sorted = []
 category = ["pioneer", "sniper", "medic", "caster", "warrior", "tank", "support", "special"]
+Job = ["先鋒", "狙擊", "醫療", "術師", "近衛", "重裝", "輔助", "特種"]
 for i in range(0, 8):
     temp = []
     for data in datas:
@@ -40,32 +44,31 @@ wc = wb['Sheet']
 wc.title = 'Char'
 wd = wb.create_sheet('Data')
 
-wd.merge_cells('A1:D1')
-wd['A1'].value = '先鋒'
-wd['A1'].alignment = Alignment(horizontal='center', vertical='center')
-cnt = 2
-for char in sorted[0]:
-    for i in range(0, 4):
-        wd[chr(65 + i) + str(cnt)].value = char[i]
-        wd[chr(65 + i) + str(cnt)].alignment = Alignment(horizontal='center', vertical='center')
-    cnt += 1
-
-# print(chr(65+1) + '{}')
+for j in range(0,8):
+    if (65 + j*4) > 90:
+        # print(chr(64 + (65 + j*4)//65) + chr((65 + j*4)-26*((65 + j*4)//65)) + '1:' + chr(64 + (68 + j*4)//65) + chr((68 + j*4)-26*((68 + j*4)//65)) + '1')
+        wd.merge_cells(chr(64 + (65 + j*4)//65) + chr((65 + j*4)-26*((65 + j*4)//65)) + '1:' + chr(64 + (68 + j*4)//65) + chr((68 + j*4)-26*((68 + j*4)//65)) + '1')
+        wd[chr(64 + (65 + j*4)//65) + chr((65 + j*4)-26*((65 + j*4)//65)) + '1'].value = Job[j]
+        wd[chr(64 + (65 + j*4)//65) + chr((65 + j*4)-26*((65 + j*4)//65)) + '1'].alignment = Alignment(horizontal='center', vertical='center')
+    elif (68 + j*4) > 90:
+        # print(chr(65 + j*4) + '1:' + chr(64 + (68 + j*4)//65) + chr((68 + j*4)-26*((68 + j*4)//65)) + '1')
+        wd.merge_cells(chr(65 + j*4) + '1:' + chr(64 + (68 + j*4)//65) + chr((68 + j*4)-26*((68 + j*4)//65)) + '1')
+        wd[chr(65 + j*4) + '1'].value = Job[j]
+        wd[chr(65 + j*4) + '1'].alignment = Alignment(horizontal='center', vertical='center')
+    else:
+        # print(chr(65 + j*4) + '1:' + chr(68 + j*4) + '1')
+        wd.merge_cells(chr(65 + j*4) + '1:' + chr(68 + j*4) + '1')
+        wd[chr(65 + j*4) + '1'].value = Job[j]
+        wd[chr(65 + j*4) + '1'].alignment = Alignment(horizontal='center', vertical='center')
+    cnt = 2
+    for char in sorted[j]:
+        for i in range(0, 4):
+            if (65 + j*4 + i) > 90:
+                wd[chr(64 + (65 + j*4 + i)//65) + chr((65 + j*4 + i)-26*((65 + j*4 + i)//65)) + str(cnt)].value = char[i]
+                wd[chr(64 + (65 + j*4 + i)//65) + chr((65 + j*4 + i)-26*((65 + j*4 + i)//65)) + str(cnt)].alignment = Alignment(horizontal='center', vertical='center')
+            else:
+                wd[chr(65 + j*4 + i) + str(cnt)].value = char[i]
+                wd[chr(65 + j*4 + i) + str(cnt)].alignment = Alignment(horizontal='center', vertical='center')
+        cnt += 1
 
 wb.save('Test.xlsx')
-
-# wb = Workbook()
-
-# ws = wb.create_sheet('New Sheet')
-
-# wa = wb['Sheet']
-
-# for number in range(1,100): #Generates 99 "ip" address in the Column A;
-#     ws['A{}'.format(number)].value= "192.168.1.{}".format(number)
-
-# data_val = DataValidation(type="list", formula1="='New Sheet'!$A$1:$A$99") #You can change =$A:$A with a smaller range like =A1:A9
-# wa.add_data_validation(data_val)
-
-# data_val.add(wa["B1"]) #If you go to the cell B1 you will find a drop down list with all the values from the column A
-
-# wb.save('Test.xlsx')
