@@ -7,7 +7,7 @@ import io
 import json
 import mysql.connector
 from opencc import OpenCC
-cc = OpenCC('s2twp')
+cc = OpenCC('s2t')
 
 arkdb = mysql.connector.connect(
     host = "192.168.168.146",
