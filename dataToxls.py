@@ -14,6 +14,13 @@ import mysql.connector
 def takeThird(elem):
     return elem[2]
 
+def convert(cnt):
+    cnt -= 65
+    if cnt > 25:
+        cntC = chr(64 + cnt // 26) + chr(65 + (cnt % 26))
+    else:
+        cntC = chr(65 + (cnt % 26))
+    return cntC
 
 arkdb = mysql.connector.connect(
     host="192.168.168.146",
@@ -45,30 +52,16 @@ wc.title = 'Char'
 wd = wb.create_sheet('Data')
 
 for j in range(0,8):
-    if (65 + j*4) > 90:
-        # print(chr(64 + (65 + j*4)//65) + chr((65 + j*4)-26*((65 + j*4)//65)) + '1:' + chr(64 + (68 + j*4)//65) + chr((68 + j*4)-26*((68 + j*4)//65)) + '1')
-        wd.merge_cells(chr(64 + (65 + j*4)//65) + chr((65 + j*4)-26*((65 + j*4)//65)) + '1:' + chr(64 + (68 + j*4)//65) + chr((68 + j*4)-26*((68 + j*4)//65)) + '1')
-        wd[chr(64 + (65 + j*4)//65) + chr((65 + j*4)-26*((65 + j*4)//65)) + '1'].value = Job[j]
-        wd[chr(64 + (65 + j*4)//65) + chr((65 + j*4)-26*((65 + j*4)//65)) + '1'].alignment = Alignment(horizontal='center', vertical='center')
-    elif (68 + j*4) > 90:
-        # print(chr(65 + j*4) + '1:' + chr(64 + (68 + j*4)//65) + chr((68 + j*4)-26*((68 + j*4)//65)) + '1')
-        wd.merge_cells(chr(65 + j*4) + '1:' + chr(64 + (68 + j*4)//65) + chr((68 + j*4)-26*((68 + j*4)//65)) + '1')
-        wd[chr(65 + j*4) + '1'].value = Job[j]
-        wd[chr(65 + j*4) + '1'].alignment = Alignment(horizontal='center', vertical='center')
-    else:
-        # print(chr(65 + j*4) + '1:' + chr(68 + j*4) + '1')
-        wd.merge_cells(chr(65 + j*4) + '1:' + chr(68 + j*4) + '1')
-        wd[chr(65 + j*4) + '1'].value = Job[j]
-        wd[chr(65 + j*4) + '1'].alignment = Alignment(horizontal='center', vertical='center')
+    wd.merge_cells(convert(65 + j*4) + '1:' + convert(68 + j*4) + '1')
+    # print(convert(65 + j*4) + '1:' + convert(68 + j*4) + '1')
+    wd[convert(65 + j*4) + '1'].value = Job[j]
+    wd[convert(65 + j*4) + '1'].alignment = Alignment(horizontal='center', vertical='center')
     cnt = 2
     for char in sorted[j]:
         for i in range(0, 4):
-            if (65 + j*4 + i) > 90:
-                wd[chr(64 + (65 + j*4 + i)//65) + chr((65 + j*4 + i)-26*((65 + j*4 + i)//65)) + str(cnt)].value = char[i]
-                wd[chr(64 + (65 + j*4 + i)//65) + chr((65 + j*4 + i)-26*((65 + j*4 + i)//65)) + str(cnt)].alignment = Alignment(horizontal='center', vertical='center')
-            else:
-                wd[chr(65 + j*4 + i) + str(cnt)].value = char[i]
-                wd[chr(65 + j*4 + i) + str(cnt)].alignment = Alignment(horizontal='center', vertical='center')
+            wd[convert(65 + j*4 + i) + str(cnt)].value = char[i]
+            # print(convert(65 + j*4 + i) + str(cnt))
+            wd[convert(65 + j*4 + i) + str(cnt)].alignment = Alignment(horizontal='center', vertical='center')
         cnt += 1
 
 wb.save('Test.xlsx')
