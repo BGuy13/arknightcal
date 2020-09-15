@@ -43,7 +43,6 @@ category1 = ["pioneer", "sniper", "medic", "caster", "warrior", "tank", "support
 category2 = ["0_2", "0_3", "0_4", "0_5", "0_6", "0_7", "1_8", "1_9", "1_10", "2_8", "2_9", "2_10", "3_8", "3_9", "3_10"]
 category3 = [1, 3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
 category4 = ["m1", "m2", "m3", "m4"]
-Job = ["先鋒", "狙擊", "醫療", "術師", "近衛", "重裝", "輔助", "特種"]
 for i in range(0, 8):
     temp = []
     for data in datas:
@@ -66,9 +65,6 @@ we = wb.create_sheet('Elite')
 
 # 角色簡介
 for j in range(0,8):
-    # ws.merge_cells(convert(65 + j*3) + '1:' + convert(67 + j*3) + '1')
-    # ws[convert(65 + j*3) + '1'].value = Job[j]
-    # ws[convert(65 + j*3) + '1'].alignment = Alignment(horizontal='center', vertical='center')
     cnt = 2
     star = 6
     temp = 0
