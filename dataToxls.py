@@ -66,15 +66,33 @@ we = wb.create_sheet('Elite')
 
 # 角色簡介
 for j in range(0,8):
-    ws.merge_cells(convert(65 + j*4) + '1:' + convert(68 + j*4) + '1')
-    ws[convert(65 + j*4) + '1'].value = Job[j]
-    ws[convert(65 + j*4) + '1'].alignment = Alignment(horizontal='center', vertical='center')
+    # ws.merge_cells(convert(65 + j*3) + '1:' + convert(67 + j*3) + '1')
+    # ws[convert(65 + j*3) + '1'].value = Job[j]
+    # ws[convert(65 + j*3) + '1'].alignment = Alignment(horizontal='center', vertical='center')
     cnt = 2
+    star = 6
+    temp = 0
+    ws[convert(65 + j*3 + 2) + '1'].value = "----6----"
+    ws[convert(65 + j*3 + 2) + '1'].alignment = Alignment(horizontal='center', vertical='center')
     for char in sorted[j]:
-        for i in range(0, 4):
-            ws[convert(65 + j*4 + i) + str(cnt)].value = char[i]
-            ws[convert(65 + j*4 + i) + str(cnt)].alignment = Alignment(horizontal='center', vertical='center')
-            ws.column_dimensions[convert(65 + j*4 + i)].width = 11
+        for i in range(0, 3):
+            if char[2] != star:
+                star = char[2]
+                ws[convert(65 + j*3 + 2) + str(cnt + temp)].value = "----" + str(star) + "----"
+                ws[convert(65 + j*3 + 2) + str(cnt + temp)].alignment = Alignment(horizontal='center', vertical='center')
+                temp += 1
+            if i > 1:
+                ws[convert(65 + j*3 + i) + str(cnt + temp)].value = char[i+1]
+                ws[convert(65 + j*3 + i) + str(cnt + temp)].alignment = Alignment(horizontal='center', vertical='center')
+            else:
+                ws[convert(65 + j*3 + i) + str(cnt + temp)].value = char[i]
+                ws[convert(65 + j*3 + i) + str(cnt + temp)].alignment = Alignment(horizontal='center', vertical='center')
+            if i%3 == 0:
+                ws.column_dimensions[convert(65 + j*3 + i)].width = 5
+            elif i%3 == 1:
+                ws.column_dimensions[convert(65 + j*3 + i)].width = 7
+            else:
+                ws.column_dimensions[convert(65 + j*3 + i)].width = 11
         cnt += 1
 
 # 技能需求
@@ -132,7 +150,10 @@ for i in range(1, lastID):
                 we.column_dimensions[convert(66 + j*8 + k*2)].width = 13
                 we[convert((66 + j*8 + k*2) + 1) + str(i+2)].value = el[str(j+1)]['materials'][category4[k]]['quantity']
                 we[convert((66 + j*8 + k*2) + 1) + str(i+2)].alignment = Alignment(horizontal='center', vertical='center')
-                we.column_dimensions[convert((66 + j*8 + k*2) + 1)].width = 7
+                if k%4 == 0:
+                    we.column_dimensions[convert((66 + j*8 + k*2) + 1)].width = 7
+                else:
+                    we.column_dimensions[convert((66 + j*8 + k*2) + 1)].width = 4
             except:
                 break
 we.column_dimensions['A'].width = 11

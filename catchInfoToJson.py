@@ -48,7 +48,7 @@ for data in datas:
             try:
                 ski["m" + str(j)] = {}
                 ski["m" + str(j)]["name"] = cc.convert(html.xpath("/html/body/div[2]/div[1]/div[2]/table[5]/tbody/tr[" + str(i-1) + "]/td/a[" + str(j) + "]/div/table/tr[1]/td[2]/text()")[0])
-                ski["m" + str(j)]["quantity"] = html.xpath("/html/body/div[2]/div[1]/div[2]/table[5]/tbody/tr[" + str(i-1) + "]/td/a[" + str(j) + "]/span/text()")[0]
+                ski["m" + str(j)]["quantity"] = int(html.xpath("/html/body/div[2]/div[1]/div[2]/table[5]/tbody/tr[" + str(i-1) + "]/td/a[" + str(j) + "]/span/text()")[0])
             except:
                 del ski["m" + str(j)]
                 break
@@ -63,7 +63,7 @@ for data in datas:
                 try:
                     sksi["m" + str(j)] = {}
                     sksi["m" + str(j)]["name"] = cc.convert(html.xpath("/html/body/div[2]/div[1]/div[2]/table[" + str(s+1) + "]/tbody/tr[5]/td[" + str(i-7) + "]/a[" + str(j) + "]/div/table/tr[1]/td[2]/text()")[0])
-                    sksi["m" + str(j)]["quantity"] = html.xpath("/html/body/div[2]/div[1]/div[2]/table[" + str(s+1) + "]/tbody/tr[5]/td[" + str(i-7) + "]/a[" + str(j) + "]/span/text()")[0]
+                    sksi["m" + str(j)]["quantity"] = int(html.xpath("/html/body/div[2]/div[1]/div[2]/table[" + str(s+1) + "]/tbody/tr[5]/td[" + str(i-7) + "]/a[" + str(j) + "]/span/text()")[0])
                 except:
                     del sksi["m" + str(j)]
                     break
@@ -79,7 +79,7 @@ for data in datas:
                 if not eli["m" + str(j)]["name"]:
                     del eli["m" + str(j)]
                     break
-                eli["m" + str(j)]["quantity"] = html.xpath("/html/body/div[2]/div[1]/div[2]/table[" + str(i+5) + "]/tbody/tr[4]/td/a[" + str(j) + "]/span/text()")[0]
+                eli["m" + str(j)]["quantity"] = int(html.xpath("/html/body/div[2]/div[1]/div[2]/table[" + str(i+5) + "]/tbody/tr[4]/td/a[" + str(j) + "]/span/text()")[0])
             except:
                 del eli["m" + str(j)]
                 break
