@@ -102,30 +102,28 @@ for j in range(0, 8):
 # 技能需求
 temp = 66
 for i in range(0, 15):
-    wd.merge_cells(convert(temp) + '1:' + convert(temp + category3[i]*2 - 1) + '1')
-    wd[convert(temp) + '1'].value = 'S' + category2[i]
-    wd[convert(temp) + '1'].alignment = Alignment(horizontal='center', vertical='center')
     for j in range(0, category3[i]):
-        wd.merge_cells(convert(temp + j*2) + '2:' + convert(temp + j*2 + 1) + '2')
-        wd[convert(temp + j*2) + '2'].value = category4[j]
-        wd[convert(temp + j*2) + '2'].alignment = Alignment(horizontal='center', vertical='center')
+        wd[convert(temp + j*2) + '1'].value = 'S' + category2[i] + '_' + category4[j] + '_n'
+        wd[convert(temp + j*2) + '1'].alignment = Alignment(horizontal='center', vertical='center')
+        wd[convert(temp + j*2 + 1) + '1'].value = 'S' + category2[i] + '_' + category4[j] + '_q'
+        wd[convert(temp + j*2 + 1) + '1'].alignment = Alignment(horizontal='center', vertical='center')
     temp += category3[i]*2
 
 for i in range(1, lastID):
     check = checks[str(i)]
-    wd['A' + str(i+2)].value = check['name']
-    wd['A' + str(i+2)].alignment = Alignment(horizontal='center', vertical='center')
+    wd['A' + str(i+1)].value = check['name']
+    wd['A' + str(i+1)].alignment = Alignment(horizontal='center', vertical='center')
     sk = check['demand']['skill']
     temp = 66
     for j in range(0, 15):
         for k in range(0, category3[j]):
             try:
-                wd[convert(temp + k*2) + str(i+2)].value = sk[category2[j]]['materials'][category4[k]]['name']
-                wd[convert(temp + k*2) + str(i+2)].alignment = Alignment(horizontal='center', vertical='center')
+                wd[convert(temp + k*2) + str(i+1)].value = sk[category2[j]]['materials'][category4[k]]['name']
+                wd[convert(temp + k*2) + str(i+1)].alignment = Alignment(horizontal='center', vertical='center')
                 wd.column_dimensions[convert(temp + k*2)].width = 13
-                wd[convert(temp + k*2 + 1) + str(i+2)].value = sk[category2[j]]['materials'][category4[k]]['quantity']
-                wd[convert(temp + k*2 + 1) + str(i+2)].alignment = Alignment(horizontal='center', vertical='center')
-                wd.column_dimensions[convert(temp + k*2 + 1)].width = 5
+                wd[convert(temp + k*2 + 1) + str(i+1)].value = sk[category2[j]]['materials'][category4[k]]['quantity']
+                wd[convert(temp + k*2 + 1) + str(i+1)].alignment = Alignment(horizontal='center', vertical='center')
+                wd.column_dimensions[convert(temp + k*2 + 1)].width = 11
             except:
                 break
         temp += category3[j]*2
@@ -133,31 +131,26 @@ wd.column_dimensions['A'].width = 11
 
 # 菁英化需求
 for i in range(0, 2):
-    we.merge_cells(convert(66 + i*8) + '1:' + convert(66 + i*8 + 7) + '1')
-    we[convert(66 + i*8) + '1'].value = 'E' + str(i+1)
-    we[convert(66 + i*8) + '1'].alignment = Alignment(horizontal='center', vertical='center')
     for j in range(0, 4):
-        we.merge_cells(convert((66 + i*8) + j*2) + '2:' + convert((66 + i*8) + j*2 + 1) + '2')
-        we[convert((66 + i*8) + j*2) + '2'].value = category4[j]
-        we[convert((66 + i*8) + j*2) + '2'].alignment = Alignment(horizontal='center', vertical='center')
+        we[convert((66 + i*8) + j*2) + '1'].value = 'E' + str(i+1) + '_' + category4[j] + '_n'
+        we[convert((66 + i*8) + j*2) + '1'].alignment = Alignment(horizontal='center', vertical='center')
+        we[convert((66 + i*8) + j*2 + 1) + '1'].value = 'E' + str(i+1) + '_' + category4[j] + '_q'
+        we[convert((66 + i*8) + j*2 + 1) + '1'].alignment = Alignment(horizontal='center', vertical='center')
 
 for i in range(1, lastID):
     check = checks[str(i)]
-    we['A' + str(i+2)].value = check['name']
-    we['A' + str(i+2)].alignment = Alignment(horizontal='center', vertical='center')
+    we['A' + str(i+1)].value = check['name']
+    we['A' + str(i+1)].alignment = Alignment(horizontal='center', vertical='center')
     el = check['demand']['elite']
     for j in range(0, 2):
         for k in range(0, 4):
             try:
-                we[convert(66 + j*8 + k*2) + str(i+2)].value = el[str(j+1)]['materials'][category4[k]]['name']
-                we[convert(66 + j*8 + k*2) + str(i+2)].alignment = Alignment(horizontal='center', vertical='center')
+                we[convert(66 + j*8 + k*2) + str(i+1)].value = el[str(j+1)]['materials'][category4[k]]['name']
+                we[convert(66 + j*8 + k*2) + str(i+1)].alignment = Alignment(horizontal='center', vertical='center')
                 we.column_dimensions[convert(66 + j*8 + k*2)].width = 13
-                we[convert((66 + j*8 + k*2) + 1) + str(i+2)].value = el[str(j+1)]['materials'][category4[k]]['quantity']
-                we[convert((66 + j*8 + k*2) + 1) + str(i+2)].alignment = Alignment(horizontal='center', vertical='center')
-                if k%4 == 0:
-                    we.column_dimensions[convert((66 + j*8 + k*2) + 1)].width = 7
-                else:
-                    we.column_dimensions[convert((66 + j*8 + k*2) + 1)].width = 4
+                we[convert((66 + j*8 + k*2) + 1) + str(i+1)].value = el[str(j+1)]['materials'][category4[k]]['quantity']
+                we[convert((66 + j*8 + k*2) + 1) + str(i+1)].alignment = Alignment(horizontal='center', vertical='center')
+                we.column_dimensions[convert((66 + j*8 + k*2) + 1)].width = 11
             except:
                 break
 we.column_dimensions['A'].width = 11
@@ -166,7 +159,6 @@ we.column_dimensions['A'].width = 11
 new_range = defined_name.DefinedName('職業', attr_text='Summary!$A$1:$A$8')
 wb.defined_names.append(new_range)
 
-Job_range = []
 for i in range(0, 8):
     for j in range(2, 100):
         if ws[convert(68 + i*3) + str(j)].value is None:
@@ -174,15 +166,22 @@ for i in range(0, 8):
     j -= 1
 
     new_range = defined_name.DefinedName(Job[i], attr_text='Summary!$' + convert(68 + i*3) + '$1:$' + convert(68 + i*3) + '$' + str(j))
-    Job_range.append(new_range)
     wb.defined_names.append(new_range)
+
+wc['B2'].value = '職業'
+wc['B2'].alignment = Alignment(horizontal='center', vertical='center')
 
 data_val = DataValidation(type='list', formula1='=職業')
 wc.add_data_validation(data_val)
-data_val.add(wc['A2'])
+data_val.add(wc['B3'])
+wc['B3'].alignment = Alignment(horizontal='center', vertical='center')
 
-data_val = DataValidation(type='list', formula1='=INDIRECT(A2)')
+wc['D2'].value = '角色'
+wc['D2'].alignment = Alignment(horizontal='center', vertical='center')
+
+data_val = DataValidation(type='list', formula1='=INDIRECT(B3)')
 wc.add_data_validation(data_val)
-data_val.add(wc['B2'])
+data_val.add(wc['D3'])
+wc['D3'].alignment = Alignment(horizontal='center', vertical='center')
 
 wb.save('Test.xlsx')
