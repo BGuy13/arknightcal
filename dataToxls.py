@@ -38,6 +38,7 @@ lastID = cursor.fetchone()
 lastID = lastID[0]
 # print(lastID[0])
 
+left, right, top, bottom = [Side(style='thin', color='000000')]*4
 
 Job = ["先鋒", "狙擊", "醫療", "術師", "近衛", "重裝", "輔助", "特種"]
 category1 = ["pioneer", "sniper", "medic", "caster", "warrior", "tank", "support", "special"]
@@ -170,18 +171,40 @@ for i in range(0, 8):
 
 wc['B2'].value = '職業'
 wc['B2'].alignment = Alignment(horizontal='center', vertical='center')
+wc['B2'].border = Border(left=left, right=right, top=top, bottom=bottom)
 
 data_val = DataValidation(type='list', formula1='=職業')
 wc.add_data_validation(data_val)
-data_val.add(wc['B3'])
+data_val.add(wc['C2'])
+wc['C2'].alignment = Alignment(horizontal='center', vertical='center')
+wc['C2'].border = Border(left=left, right=right, top=top, bottom=bottom)
+
+wc['B3'].value = '角色'
 wc['B3'].alignment = Alignment(horizontal='center', vertical='center')
+wc['B3'].border = Border(left=left, right=right, top=top, bottom=bottom)
 
-wc['D2'].value = '角色'
-wc['D2'].alignment = Alignment(horizontal='center', vertical='center')
-
-data_val = DataValidation(type='list', formula1='=INDIRECT(B3)')
+data_val = DataValidation(type='list', formula1='=INDIRECT(C2)')
 wc.add_data_validation(data_val)
-data_val.add(wc['D3'])
-wc['D3'].alignment = Alignment(horizontal='center', vertical='center')
+data_val.add(wc['C3'])
+wc['C3'].alignment = Alignment(horizontal='center', vertical='center')
+wc['C3'].border = Border(left=left, right=right, top=top, bottom=bottom)
+
+# 資料顯示
+init = 2
+for i in range(0, 7):
+    wc.merge_cells('E' + str(init) + ':E' + str(init + category3[i] - 1))
+    wc['E' + str(init)].value = '技能等級' + str(i)
+    wc['E' + str(init)].alignment = Alignment(horizontal='center', vertical='center')
+    init += category3[i]
+wc.column_dimensions['E'].width = 11
+
+for i in range(2, init):
+    for j in range(0, 2):
+        wc[convert(70 + j) + str(i)].value = '=IFNA(VLOOKUP(C3, Skill!$A$2:$CE$160, 8, FALSE), "")'
+        wc[convert(70 + j) + str(i)].value
+
+for j in range(0, 3):
+    for i in range(2, init):
+        wc[convert(69 + j) + str(i)].border = Border(left=left, right=right, top=top, bottom=bottom)
 
 wb.save('Test.xlsx')
