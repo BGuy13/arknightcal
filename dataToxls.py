@@ -189,22 +189,76 @@ data_val.add(wc['C3'])
 wc['C3'].alignment = Alignment(horizontal='center', vertical='center')
 wc['C3'].border = Border(left=left, right=right, top=top, bottom=bottom)
 
-# 資料顯示
+wc.column_dimensions['D'].width = 2
+
+# 資料顯示 - 技能
 init = 2
-for i in range(0, 7):
+for i in range(0, 6):
     wc.merge_cells('E' + str(init) + ':E' + str(init + category3[i] - 1))
-    wc['E' + str(init)].value = '技能等級' + str(i)
+    wc['E' + str(init)].value = '技能等級' + str(i+1)
     wc['E' + str(init)].alignment = Alignment(horizontal='center', vertical='center')
     init += category3[i]
-wc.column_dimensions['E'].width = 11
 
 for i in range(2, init):
-    for j in range(0, 2):
-        wc[convert(70 + j) + str(i)].value = '=IFNA(VLOOKUP(C3, Skill!$A$2:$CE$160, 8, FALSE), "")'
-        wc[convert(70 + j) + str(i)].value
+    wc['F' + str(i)].value = '=IF(IFERROR(VLOOKUP(C3, Skill!$A$2:$CE$160, ' + str(i*2 - 2) + ', FALSE), "")=0, "", IFERROR(VLOOKUP(C3, Skill!$A$2:$CE$160, ' + str(i*2 - 2) + ', FALSE), ""))'
+    wc['G' + str(i)].value = '=IF(IFERROR(VLOOKUP(C3, Skill!$A$2:$CE$160, ' + str(i*2 - 1) + ', FALSE), "")=0, "", IFERROR(VLOOKUP(C3, Skill!$A$2:$CE$160, ' + str(i*2 - 1) + ', FALSE), ""))'
 
 for j in range(0, 3):
     for i in range(2, init):
         wc[convert(69 + j) + str(i)].border = Border(left=left, right=right, top=top, bottom=bottom)
+
+wc.column_dimensions['E'].width = 11
+wc.column_dimensions['F'].width = 13
+wc.column_dimensions['G'].width = 7
+
+wc.column_dimensions['H'].width = 1
+
+temp = 2
+for i in range(1, 4):
+    wc.merge_cells('I' + str(temp) + ':I' + str(temp + 8))
+    wc['I' + str(temp)].value = '技能' + str(i)
+    wc['I' + str(temp)].alignment = Alignment(horizontal='center', vertical='center')
+    init = 1
+    for j in range(1, 4):
+        wc.merge_cells('J' + str(temp) + ':J' + str(temp + 2))
+        wc['J' + str(temp)].value = '專' + str(init)
+        wc['J' + str(temp)].alignment = Alignment(horizontal='center', vertical='center')
+        temp += 3
+        init += 1
+
+for i in range(2, temp):
+    wc['K' + str(i)].value = '=IF(IFERROR(VLOOKUP(C3, Skill!$A$2:$CE$160, ' + str(i*2 + 26) + ', FALSE), "")=0, "", IFERROR(VLOOKUP(C3, Skill!$A$2:$CE$160, ' + str(i*2 + 26) + ', FALSE), ""))'
+    wc['L' + str(i)].value = '=IF(IFERROR(VLOOKUP(C3, Skill!$A$2:$CE$160, ' + str(i*2 + 27) + ', FALSE), "")=0, "", IFERROR(VLOOKUP(C3, Skill!$A$2:$CE$160, ' + str(i*2 + 27) + ', FALSE), ""))'
+
+for j in range(0, 4):
+    for i in range(2, temp):
+        wc[convert(73 + j) + str(i)].border = Border(left=left, right=right, top=top, bottom=bottom)
+
+wc.column_dimensions['I'].width = 7
+wc.column_dimensions['J'].width = 7
+wc.column_dimensions['K'].width = 13
+wc.column_dimensions['L'].width = 11
+
+wc.column_dimensions['M'].width = 2
+
+# 資料顯示 - 菁英化
+init = 2
+for i in range(0, 2):
+    wc.merge_cells('N' + str(init) + ':N' + str(init + 3))
+    wc['N' + str(init)].value = '菁英' + str(i+1)
+    wc['N' + str(init)].alignment = Alignment(horizontal='center', vertical='center')
+    init += 4
+
+for i in range(2, init):
+    wc['O' + str(i)].value = '=IF(IFERROR(VLOOKUP(C3, Elite!$A$2:$Q$160, ' + str(i*2 - 2) + ', FALSE), "")=0, "", IFERROR(VLOOKUP(C3, Elite!$A$2:$Q$160, ' + str(i*2 - 2) + ', FALSE), ""))'
+    wc['P' + str(i)].value = '=IF(IFERROR(VLOOKUP(C3, Elite!$A$2:$Q$160, ' + str(i*2 - 1) + ', FALSE), "")=0, "", IFERROR(VLOOKUP(C3, Elite!$A$2:$Q$160, ' + str(i*2 - 1) + ', FALSE), ""))'
+  
+for j in range(0, 3):
+    for i in range(2, init):
+        wc[convert(78 + j) + str(i)].border = Border(left=left, right=right, top=top, bottom=bottom)
+
+wc.column_dimensions['N'].width = 7
+wc.column_dimensions['O'].width = 13
+wc.column_dimensions['P'].width = 7
 
 wb.save('Test.xlsx')
