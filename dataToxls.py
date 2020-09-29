@@ -26,15 +26,18 @@ arkdb = mysql.connector.connect(
     host="192.168.168.146",
     user="arkdeve",
     password="BGuy6013@",
-    database="arknightDB"
+    database="arknightDB",
+    buffered=True
 )
 cursor = arkdb.cursor()
-
 cursor.execute("SELECT char_id, job, star, charName FROM charSummary")
 datas = cursor.fetchall()
+cursor.close()
 
+cursor = arkdb.cursor()
 cursor.execute("SELECT char_id FROM charSummary ORDER BY char_id DESC")
 lastID = cursor.fetchone()
+cursor.close()
 lastID = lastID[0]
 # print(lastID[0])
 
@@ -67,6 +70,7 @@ wc.title = 'Char'
 ws = wb.create_sheet('Summary')
 wd = wb.create_sheet('Skill')
 we = wb.create_sheet('Elite')
+wm = wb.create_sheet('Statistics')
 
 # 角色簡介
 for i in range(1, 9):
@@ -260,5 +264,28 @@ for j in range(0, 3):
 wc.column_dimensions['N'].width = 7
 wc.column_dimensions['O'].width = 13
 wc.column_dimensions['P'].width = 7
+
+# 資料儲存 - 物資總計
+cursor = arkdb.cursor()
+cursor.execute("SELECT m_name FROM material")
+materials = cursor.fetchall()
+cursor.close()
+
+wm['B1'].value = '庫存'
+wm['B1'].alignment = Alignment(horizontal='center', vertical='center')
+wm['B1'].border = Border(left=left, right=right, top=top, bottom=bottom)
+wm['C1'].value = '需求'
+wm['C1'].alignment = Alignment(horizontal='center', vertical='center')
+wm['C1'].border = Border(left=left, right=right, top=top, bottom=bottom)
+
+init = 1
+for material in materials:
+    wm['A' + str(init+1)].value = material[0]
+    wm['A' + str(init+1)].alignment = Alignment(horizontal='center', vertical='center')
+    for i in range(0, 3):
+        wm[convert(65+i) + str(init+1)].border = Border(left=left, right=right, top=top, bottom=bottom)
+    init += 1
+
+wm.column_dimensions['A'].width = 15
 
 wb.save('Test.xlsx')
